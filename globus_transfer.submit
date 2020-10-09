@@ -1,0 +1,19 @@
+#!/bin/sh
+#SBATCH --time=00:05:00
+#SBATCH --mem-per-cpu=1024
+#SBATCH --job-name=auto_backup
+##SBATCH --mail-user=
+##SBATCH --mail-type=FAIL
+#SBATCH --error=auto_backup.err
+#SBATCH --output=auto_backup.out
+#SBATCH --open-mode=append
+
+export BACKUP_FREQ=30  # Number of days between backups
+echo "Prev task ID = $PREV_TASK_ID"
+if [[ $PREV_TASK_ID == "" ]]
+then
+       PREV_TASK_ID="NA"
+fi
+
+./globus_transfer.sh $BACKUP_FREQ $PREV_TASK_ID
+
